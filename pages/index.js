@@ -1,37 +1,34 @@
-import Link from "next/link";
+import { Fragment } from 'react';
+import Head from 'next/head';
 
-import random from "../utils/random";
+import FeaturedPosts from '../components/home-page/featured-posts';
+import Hero from '../components/home-page/hero';
+import { getFeaturedPosts } from '../lib/posts-util';
 
-const products = [
-  {
-    id: random(),
-    title: "Zelbupaze",
-  },
-  {
-    id: random(),
-    title: "Oplenono",
-  },
-  {
-    id: random(),
-    title: "Ogluje",
-  },
-  {
-    id: random(),
-    title: "Ivejiduc",
-  },
-];
-
-function Home() {
+function HomePage(props) {
   return (
-    <main>
-      <h1>hello</h1>
-      {products.map((product) => (
-        <li style={{ display: "block" }} key={product.id}>
-          <Link href={`/products/${product.title}`}>{product.title}</Link>
-        </li>
-      ))}
-    </main>
+    <Fragment>
+      <Head>
+        <title>Max' Blog</title>
+        <meta
+          name='description'
+          content='I post about programming and web development.'
+        />
+      </Head>
+      <Hero />
+      <FeaturedPosts posts={props.posts} />
+    </Fragment>
   );
 }
 
-export default Home;
+export function getStaticProps() {
+  const featuredPosts = getFeaturedPosts();
+
+  return {
+    props: {
+      posts: featuredPosts,
+    },
+  };
+}
+
+export default HomePage;
